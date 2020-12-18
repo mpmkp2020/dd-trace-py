@@ -35,8 +35,7 @@ jobs:
           python -m pip install cibuildwheel==1.7.1
 
       - name: Build wheels
-        run: |
-          python -m cibuildwheel --output-dir wheelhouse
+        run: python -m cibuildwheel --output-dir wheelhouse
         env:
           CIBW_MANYLINUX_AARCH64_IMAGE: quay.io/pypa/manylinux2014_aarch64:latest
 
