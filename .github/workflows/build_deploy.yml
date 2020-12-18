@@ -12,13 +12,19 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-18.04, windows-latest, macos-latest]
+        os: [ubuntu-18.04]
 
     steps:
       - uses: actions/checkout@v2
         # Include all history and tags
         with:
           fetch-depth: 0
+
+      - name: Set up QEMU
+        id: qemu
+        uses: docker/setup-qemu-action@v1
+      - name: Available platforms
+        run: echo ${{ steps.qemu.outputs.platforms }}
 
       - uses: actions/setup-python@v2
         name: Install Python
@@ -34,6 +40,7 @@ jobs:
           python -m cibuildwheel --output-dir wheelhouse
         env:
           CIBW_SKIP: pp* cp27-win*
+          CIBW_MANYLINUX_AARCH64_IMAGE: manylinux2014
 
       - uses: actions/upload-artifact@v2
         with:
