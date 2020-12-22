@@ -36,11 +36,11 @@ jobs:
     - name: Make wheel
       run: |
         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
-          ${{ env.img }} bash -c "ls && source .env/bin/activate &&  setup.py bdist_wheel"
+          ${{ env.img }} bash -c "source .env/bin/activate &&  python setup.py bdist_wheel"
     - name: Repair wheel wheel
       run: |
         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
-          ${{ env.img }} auditwheel repair dist/*.whl --wheel-dir wheelhouse/
+          ${{ env.img }} bash -c "source .env/bin/activate && auditwheel repair dist/*.whl --wheel-dir wheelhouse/"
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
