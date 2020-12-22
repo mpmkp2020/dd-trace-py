@@ -7,7 +7,7 @@ on:
 
 jobs:
   build_wheels_aarch64:
-    name: Build wheels on ${{ matrix.os }}
+    name: Build wheels on linux ${{ matrix.arch }}
     strategy:
       matrix:
         pyver: [cp36-cp36m, cp37-cp37m, cp38-cp38, cp39-cp39]
@@ -28,7 +28,7 @@ jobs:
     - name: Install tools
       run: |
         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
-          ${{ env.img }} ${{ env.py }} -m pip install -U setuptools wheel cython
+          ${{ env.img }} ${{ env.py }} -m pip install -U setuptools wheel Cython
     - name: Make wheel
       run: |
         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
