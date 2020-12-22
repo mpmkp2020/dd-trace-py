@@ -60,7 +60,6 @@ jobs:
     - name: Setup environment
       run: |
         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
-          ${{ env.img }} bash -c "${{ env.py }} -m venv .env"
           ${{ env.img }} bash -c "for py in `which /opt/python/*/bin/python`; do pyver=.env`echo $py | grep -o -E '[0-9]+' | head -1 | sed -e 's/^0\+//'`; echo " $py -m venv $pyver";  $py -m venv $pyver; done"
     # ${{ env.img }} bash -c "${{ env.py }} -m venv .env"
     
