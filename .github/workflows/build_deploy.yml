@@ -61,22 +61,25 @@ jobs:
       run: |
         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
           ${{ env.img }} bash -c "${{ env.py }} -m venv .env"
-    - name: Install tools
-      run: |
-        docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
-          ${{ env.img }} bash -c "source .env/bin/activate && python -m pip install -U setuptools wheel Cython"
-    - name: Make wheel
-      run: |
-        docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
-          ${{ env.img }} bash -c "source .env/bin/activate &&  python setup.py bdist_wheel"
-    - name: Repair wheel wheel
-      run: |
-        docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
-          ${{ env.img }} bash -c "source .env/bin/activate && auditwheel repair dist/*.whl --wheel-dir wheelhouse/"
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        path: ./wheelhouse/*.whl
+          ${{ env.img }} bash -c "for py in `which /opt/python/*/bin/python`; do pyver=.env`echo $py | grep -o -E '[0-9]+' | head -1 | sed -e 's/^0\+//'`; echo " $py -m venv $pyver";  $py -m venv $pyver; done"
+    # ${{ env.img }} bash -c "${{ env.py }} -m venv .env"
+    
+    #- name: Install tools
+    #  run: |
+    #    docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
+    #      ${{ env.img }} bash -c "source .env/bin/activate && python -m pip install -U setuptools wheel Cython"
+    #- name: Make wheel
+    #  run: |
+    #    docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
+    #      ${{ env.img }} bash -c "source .env/bin/activate &&  python setup.py bdist_wheel"
+    #- name: Repair wheel wheel
+    #  run: |
+    #    docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
+    #      ${{ env.img }} bash -c "source .env/bin/activate && auditwheel repair dist/*.whl --wheel-dir wheelhouse/"
+    #- name: Upload artifacts
+    #  uses: actions/upload-artifact@v2
+    #  with:
+    #    path: ./wheelhouse/*.whl
 
   build_sdist:
     name: Build source distribution
