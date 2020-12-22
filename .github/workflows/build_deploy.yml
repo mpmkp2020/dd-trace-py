@@ -25,14 +25,18 @@ jobs:
       uses: docker/setup-qemu-action@v1
     - name: Available platforms
       run: echo ${{ steps.qemu.outputs.platforms }}
+    - name: Setup environment
+      run: |
+        docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
+          ${{ env.img }} bash -c "${{ env.py }} -m venv .env"
     - name: Install tools
       run: |
         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
-          ${{ env.img }} bash -c "${{ env.py }} -m pip install -U setuptools wheel Cython && ${{ env.py }} setup.py bdist_wheel"
+          ${{ env.img }} bash -c "source .env/bin/activate && python -m pip install -U setuptools wheel Cython"
     - name: Make wheel
       run: |
         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
-          ${{ env.img }} bash -C '${{ env.py }} setup.py bdist_wheel'
+          ${{ env.img }} bash -C "source .env/bin/activate &&  setup.py bdist_wheel"
     - name: Repair wheel wheel
       run: |
         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
