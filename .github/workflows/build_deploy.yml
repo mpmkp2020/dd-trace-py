@@ -28,7 +28,7 @@ jobs:
     - name: Install tools
       run: |
         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
-          ${{ env.img }} ${{ env.py }} -m pip install -U setuptools wheel Cython && ${{ env.py }} setup.py bdist_wheel
+          ${{ env.img }} bash -c "${{ env.py }} -m pip install -U setuptools wheel Cython && ${{ env.py }} setup.py bdist_wheel"
     - name: Make wheel
       run: |
         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
