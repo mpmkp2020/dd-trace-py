@@ -69,8 +69,8 @@ jobs:
       run: |
         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
         ${{ env.img }} bash -c " \
-        for env in `ls ./env3*/bin/activate`; do \
-          source $env; \
+        for pyenv in `find . -name activate`; do \
+          source $pyenv; \
           pip install -U setuptools wheel Cython; \
           pip --version; \
         done"
