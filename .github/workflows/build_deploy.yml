@@ -75,18 +75,22 @@ jobs:
         for pyenv in `find . -name activate`; do
           source $pyenv;
           pip install -U setuptools wheel Cython;
+          deactivate;
         done
         '
     #      ${{ env.img }} bash -c "source .env/bin/activate && python -m pip install -U setuptools wheel Cython"
     - name: Make wheel
       run: |
         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
-        ${{ env.img }} bash -c " \
-        for pyenv in `find . -name activate`; do \
-          source $pyenv; \
-          python setup.py bdist_wheel; \
-          deactivate; \
-        done"
+        ${{ env.img }} bash -c \
+        '
+        for pyenv in `find . -name activate`; do
+          source $pyenv;
+          python setup.py bdist_wheel;
+          deactivate;
+          ls -l dist
+        done
+        '
     #      ${{ env.img }} bash -c "source .env/bin/activate &&  python setup.py bdist_wheel"
     - name: Repair wheel wheel
       run: |
