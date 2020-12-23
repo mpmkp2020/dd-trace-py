@@ -63,10 +63,10 @@ jobs:
           ${{ env.img }} bash -c " \
           for xpy in `which /opt/python/*/bin/python`; do \
             pyver=.env`echo $xpy | grep -o -E '[0-9]+' | head -1 | sed -e 's/^0\+//'`; \
-            echo " $xpy -m venv $pyver"; \
             $xpy -m venv $pyver; \
           done"
     # ${{ env.img }} bash -c "${{ env.py }} -m venv .env"
+    #        echo " $xpy -m venv $pyver"; \
     
     #- name: Install tools
     #  run: |
