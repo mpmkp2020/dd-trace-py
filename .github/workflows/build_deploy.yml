@@ -42,7 +42,6 @@ jobs:
     name: Build wheels on linux ${{ matrix.arch }}
     strategy:
       matrix:
-        pyver: [cp36-cp36m, cp37-cp37m, cp38-cp38, cp39-cp39]
         arch: [aarch64]
       fail-fast: false
     runs-on: ubuntu-latest
@@ -61,9 +60,9 @@ jobs:
       run: |
         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
           ${{ env.img }} bash -c " \
-          for xpy in `which /opt/python/*/bin/python`; do \
-            pyver=.env`echo $xpy | grep -o -E '[0-9]+' | head -1 | sed -e 's/^0\+//'`; \
-            $xpy -m venv $pyver; \
+          for pyv in `which /opt/python/*/bin/python`; do \
+            pyver=.env`echo $pyv | grep -o -E '[0-9]+' | head -1 | sed -e 's/^0\+//'`; \
+            $pyv -m venv $pyver; \
           done"
     # ${{ env.img }} bash -c "${{ env.py }} -m venv .env"
     #        echo " $xpy -m venv $pyver"; \
