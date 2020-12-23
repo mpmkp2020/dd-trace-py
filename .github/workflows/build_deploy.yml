@@ -62,22 +62,21 @@ jobs:
         ${{ env.img }} bash -c \
         '
         for pyv in `which /opt/python/*/bin/python`; do 
-          echo $pyv;
           pyver=.env`echo $pyv | grep -o -E '[0-9]+' | head -1 | sed -e 's/^0\+//'`;
           $pyv -m venv $pyver;
-          ls -al;
         done
         '
     
     - name: Install tools
       run: |
         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
-        ${{ env.img }} bash -c " \
-        for pyenv in `find . -name activate`; do \
-          source $pyenv; \
-          pip install -U setuptools wheel Cython; \
-          pip --version; \
-        done"
+        ${{ env.img }} bash -c \
+        '
+        for pyenv in `find . -name activate`; do
+          source $pyenv;
+          pip install -U setuptools wheel Cython;
+        done
+        '
     #      ${{ env.img }} bash -c "source .env/bin/activate && python -m pip install -U setuptools wheel Cython"
     - name: Make wheel
       run: |
