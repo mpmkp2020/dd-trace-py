@@ -63,10 +63,10 @@ jobs:
         '
         for pyv in `which /opt/python/*/bin/python`; do 
           echo $pyv;
+          pyver=.env`echo $pyv | grep -o -E '[0-9]+' | head -1 | sed -e 's/^0\+//'`;
+          $pyv -m venv $pyver;
         done
         '
-       #   pyver=env`echo $pyv | grep -o -E '[0-9]+' | head -1 | sed -e 's/^0\+//'`; \
-       #   $pyv -m venv $pyver; \
     
     - name: Install tools
       run: |
