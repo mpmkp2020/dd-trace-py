@@ -63,6 +63,7 @@ jobs:
           for pyv in `which /opt/python/*/bin/python`; do \
             pyver=.env`echo $pyv | grep -o -E '[0-9]+' | head -1 | sed -e 's/^0\+//'`; \
             $pyv -m venv $pyver; \
+            ls -al \
           done"
     # ${{ env.img }} bash -c "${{ env.py }} -m venv .env"
     #        echo " $xpy -m venv $pyver"; \
