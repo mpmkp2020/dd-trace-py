@@ -46,28 +46,30 @@ jobs:
       fail-fast: false
     runs-on: ubuntu-latest
     env:
-      py: /opt/python/${{ matrix.pyver }}/bin/python
       img: quay.io/pypa/manylinux2014_${{ matrix.arch }}
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+
     - name: Set up QEMU
       id: qemu
       uses: docker/setup-qemu-action@v1
+
     - name: Available platforms
       run: echo ${{ steps.qemu.outputs.platforms }}
+
     - name: Setup environment
       run: |
         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
         ${{ env.img }} bash -c \
         '
         for pyv in `which /opt/python/*/bin/python`; do 
-          pyver=.env`echo $pyv | grep -o -E '[0-9]+' | head -1 | sed -e 's/^0\+//'`;
-          $pyv -m venv $pyver;
+          #pyver=.env`echo $pyv | grep -o -E '[0-9]+' | head -1 | sed -e 's/^0\+//'`;
+          $pyv -m venv $pyv;
           break;
         done
         '
-    
+
     - name: Install tools
       run: |
         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
@@ -79,7 +81,7 @@ jobs:
           deactivate;
         done
         '
-    #      ${{ env.img }} bash -c "source .env/bin/activate && python -m pip install -U setuptools wheel Cython"
+
     - name: Make wheel
       run: |
         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
@@ -89,10 +91,9 @@ jobs:
           source $pyenv;
           python setup.py bdist_wheel;
           deactivate;
-          ls -l dist
         done
         '
-    #      ${{ env.img }} bash -c "source .env/bin/activate &&  python setup.py bdist_wheel"
+
     - name: Repair wheel wheel
       run: |
         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
@@ -100,11 +101,10 @@ jobs:
         '
         for whl in `find dist -name "*whl"`; do
           auditwheel repair $whl --wheel-dir wheelhouse/
-          ls -l wheelhouse
         done
         '
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v2
+
+    - uses: actions/upload-artifact@v2
       with:
         path: ./wheelhouse/*.whl
 
