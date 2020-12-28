@@ -64,6 +64,7 @@ jobs:
         for pyv in `which /opt/python/*/bin/python`; do 
           pyver=.env`echo $pyv | grep -o -E '[0-9]+' | head -1 | sed -e 's/^0\+//'`;
           $pyv -m venv $pyver;
+          break;
         done
         '
     
@@ -95,7 +96,13 @@ jobs:
     - name: Repair wheel wheel
       run: |
         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
-          ${{ env.img }} auditwheel repair dist/*.whl --wheel-dir wheelhouse/
+          ${{ env.img }} bash -c \
+        '
+        for whl in `find dist -name "*whl"`; do
+          auditwheel repair $whl --wheel-dir wheelhouse/
+          ls -l wheelhouse
+        done
+        '
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
