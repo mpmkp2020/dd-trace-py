@@ -64,9 +64,8 @@ jobs:
         ${{ env.img }} bash -c \
         '
         for pyv in `which /opt/python/*/bin/python`; do 
-          #pyver=.env`echo $pyv | grep -o -E '[0-9]+' | head -1 | sed -e 's/^0\+//'`;
-          $pyv -m venv .env$pyv;
-          break;
+          pyenv=.pyenv`echo $pyv | grep -o -E '[0-9]+' | head -1 | sed -e 's/^0\+//'`;
+          $pyv -m venv $pyenv;
         done
         '
 
