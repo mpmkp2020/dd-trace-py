@@ -65,7 +65,7 @@ jobs:
         '
         for pyv in `which /opt/python/*/bin/python`; do 
           #pyver=.env`echo $pyv | grep -o -E '[0-9]+' | head -1 | sed -e 's/^0\+//'`;
-          $pyv -m venv $pyv;
+          $pyv -m venv .env$pyv;
           break;
         done
         '
