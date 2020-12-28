@@ -45,7 +45,7 @@ jobs:
       matrix:
         arch: [aarch64]
       fail-fast: false
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     env:
       img: quay.io/pypa/manylinux2014_${{ matrix.arch }}
     steps:
