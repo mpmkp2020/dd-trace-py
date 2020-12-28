@@ -1,10 +1,9 @@
 name: Build
 
 on:
-  pull_request:
-  release:
-    types:
-      - published
+  push:
+    branches:
+      - master
 
 jobs:
   build_wheels:
